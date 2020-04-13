@@ -2,7 +2,6 @@ package example.com.myappattendance.UI;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,22 +17,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import example.com.myappattendance.Model.MyModelData;
 import example.com.myappattendance.R;
-import example.com.myappattendance.utils.Backable;
 import example.com.myappattendance.utils.Constants;
 import example.com.myappattendance.utils.OnActivityResultDataChanged;
 import example.com.myappattendance.utils.OnScanQrButtonClicked;
-import example.com.myappattendance.utils.callbackData;
 
 import static android.content.ContentValues.TAG;
 
