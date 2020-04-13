@@ -25,6 +25,13 @@
             </intent-filter>
         </activity>
 
+        <!--fcm-->
+        <service android:name=".fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <!--LAYOUT SCAN QRCODE-->
         <activity
             android:name=".UI.AnyOrientationCaptureActivity"

@@ -22,29 +22,23 @@ import static example.com.myappattendance.UI.Main_ScanQrcode_Fragment.myModel;
 // - Second_Showdata_Fragment
 // Set data
 // Todo - 2 = Scan Qr code ==>OK
-// Todo - 3 = get Location 
-// Todo - 4 = get Token
+// Todo - 3 = get Location ==>OK
+// Todo - 4 = get Token ==>OK
 // save data to DB ==> PHP
 // Todo - 5 = Create Php GET/POST + save to db
 // send data to PHP ==> ANDROID
 // Todo - 6 = send data
 // Todo - 7 = Show data
 
-public class MainActivity extends AppCompatActivity implements OnScanQrButtonClicked,callbackData {
+public class MainActivity extends AppCompatActivity implements OnScanQrButtonClicked, callbackData {
 
     //callback qr code
     //Callback
     //test hide
     public static OnActivityResultDataChanged mOnActivityResultDataChanged;
 
-    //test hide
-    /*public static void setOnActivityResultDataChanged(OnActivityResultDataChanged listener) {
-        mOnActivityResultDataChanged = listener;
-    }*/
-
     //get data qr code;
     String dataQrcode;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements OnScanQrButtonCli
 
             }
             {
-                //test Hide
-                /*mOnActivityResultDataChanged.onDataReceived(result.getContents());*/
                 gotoShowFragment(result.getContents(), myModel());
             }
         } else {
@@ -98,10 +90,10 @@ public class MainActivity extends AppCompatActivity implements OnScanQrButtonCli
                 .addToBackStack("")
                 .commitAllowingStateLoss();
 
-        Log.d("check","QRCODE-gotoShowFragment ==>"+contents);
-        Log.d("check","LAT-gotoShowFragment ==>"+myModel.getLAT());
-        Log.d("check","LON-gotoShowFragment ==>"+myModel.getLON());
-        Log.d("check","TOKEN-gotoShowFragment ==>"+myModel.getToken());
+        Log.d("check", "QRCODE-Main->ShowFragment ==>" + contents);
+        Log.d("check", "LAT-Main->ShowFragment ==>" + myModel.getLAT());
+        Log.d("check", "LON-Main->ShowFragment ==>" + myModel.getLON());
+        Log.d("check", "TOKEN-Main->ShowFragment ==>" + myModel.getToken());
     }
 
     @Override
@@ -117,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements OnScanQrButtonCli
         integrator.initiateScan();
     }
 
+    // callback get data from Main_ScanQrCodeFragment
     @Override
     public void listenData(String token, double lat, double lon) {
         MyModelData myModelData = new MyModelData();

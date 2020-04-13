@@ -1,11 +1,16 @@
 package example.com.myappattendance.UI;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -15,9 +20,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.io.IOException;
+import java.util.Locale;
+
 import example.com.myappattendance.Model.MyModelData;
 import example.com.myappattendance.R;
 import example.com.myappattendance.utils.Backable;
+import example.com.myappattendance.utils.Constants;
 import example.com.myappattendance.utils.OnActivityResultDataChanged;
 import example.com.myappattendance.utils.OnScanQrButtonClicked;
 import example.com.myappattendance.utils.callbackData;
@@ -26,12 +39,21 @@ import static android.content.ContentValues.TAG;
 
 public class Main_ScanQrcode_Fragment extends Fragment implements OnActivityResultDataChanged {
 
+    // Fragment get data
+
     Button btn_Scan_Qrcode;
     View v;
     // interface Qrcode
     private OnScanQrButtonClicked mOnScanQrButtonClickedListener;
-    //test send data with callback
-    //callbackData callbackData;
+
+    // sharePreference (get token)
+    private static SharedPreferences sharedPref;
+    private static String token;
+
+    //Google location
+    FusedLocationProviderClient client;
+    Geocoder geocoder;
+    public static double la, lo;
 
 
     public Main_ScanQrcode_Fragment() {
@@ -42,13 +64,48 @@ public class Main_ScanQrcode_Fragment extends Fragment implements OnActivityResu
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v =  inflater.inflate(R.layout.fragment_main__scan_qrcode, container, false);
+        v = inflater.inflate(R.layout.fragment_main__scan_qrcode, container, false);
         btn_Scan_Qrcode = v.findViewById(R.id.btn_Scan_Qrcode);
 
-        //callback Scan qr code
-        //Test Hide
-        /*MainActivity.setOnActivityResultDataChanged((this));*/
+        //googlemap
+        requestPermissionGooglemap();
+        // location
+        client = LocationServices.getFusedLocationProviderClient(getActivity());
+        getLocationAddress();
+
+        // Share get Token
+        sharedPref = getActivity().getSharedPreferences(Constants.MY_PREFS, Context.MODE_PRIVATE);
         return v;
+    }
+
+    // request permission google map
+    private void requestPermissionGooglemap() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+    }
+
+    private void getLocationAddress() {
+        /*client = LocationServices.getFusedLocationProviderClient(getActivity());*/
+        client.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                //addAddress(location);
+                /*List<Address> addresses;*/
+                Log.d("location", "LOCATION==> " + location);
+                geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                // Sep Address
+                /*addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                address1 = addresses.get(0).getAddressLine(0);
+                String city = addresses.get(0).getLocality();
+                String tambon = addresses.get(0).getSubLocality();
+                String country = addresses.get(0).getCountryName();
+                String postalCode = addresses.get(0).getPostalCode();
+                String knownName = addresses.get(0).getFeatureName();
+                String amphoe = addresses.get(0).getSubAdminArea();*/
+
+                la = location.getLatitude();
+                lo = location.getLongitude();
+            }
+        });
     }
 
     @Override
@@ -88,24 +145,21 @@ public class Main_ScanQrcode_Fragment extends Fragment implements OnActivityResu
     }
 
     // set data model sent to...
-    public static MyModelData myModel(){
+    public static MyModelData myModel() {
+
+        token = sharedPref.getString(Constants.TOKEN, "");
         MyModelData sendDataTosave = new MyModelData();
-        sendDataTosave.setLAT(100.00);
-        sendDataTosave.setLON(200.00);
-        sendDataTosave.setToken("TOKEN");
+        sendDataTosave.setLAT(la);
+        sendDataTosave.setLON(lo);
+        sendDataTosave.setToken(token);
+
+        //  Log.d("check","TOKEN==> "+token);
         return sendDataTosave;
     }
 
     @Override
     public void onDataReceived(String data) {
         //Toast.makeText(getActivity(),"FM-Scan Data is : "+data,Toast.LENGTH_SHORT).show();
-        Log.d("response","ScanFragment ==> "+data);
+        Log.d("response", "ScanFragment ==> " + data);
     }
-
-    /*@Override
-    public boolean onBackPressed() {
-        Toast.makeText(getActivity(), "finish app... ", Toast.LENGTH_SHORT).show();
-        getActivity().finish();
-        return true;
-    }*/
 }
