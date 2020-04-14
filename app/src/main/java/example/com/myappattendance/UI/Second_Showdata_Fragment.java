@@ -50,7 +50,7 @@ import static example.com.myappattendance.utils.Constants.URL_SAVE_DB;
 public class Second_Showdata_Fragment extends Fragment {
 
     View v;
-    TextView tv_token, tv_lon, tv_lat, tv_qrcode,tv_dt,tv_lastId;
+    TextView tv_token, tv_lon, tv_lat, tv_qrcode,tv_dt,tv_id;//,tv_lastId;
     //EditText et_getText;
     //Button btn_loadData;
     String qrcode, token,datetime;
@@ -72,10 +72,11 @@ public class Second_Showdata_Fragment extends Fragment {
         tv_lon = v.findViewById(R.id.tv_lon);
         tv_lat = v.findViewById(R.id.tv_lat);
         tv_qrcode = v.findViewById(R.id.tv_qrcode);
+        tv_id = v.findViewById(R.id.tv_id);
         //btn_loadData = v.findViewById(R.id.btn_loadData);
         //et_getText = v.findViewById(R.id.et_getText);
         tv_dt = v.findViewById(R.id.tv_dt);
-        tv_lastId = v.findViewById(R.id.tv_lastId);
+        //tv_lastId = v.findViewById(R.id.tv_lastId);
 
         if (getArguments() != null) {
             qrcode = getArguments().getString("QRCODE");
@@ -111,6 +112,9 @@ public class Second_Showdata_Fragment extends Fragment {
                             Log.d("response", "ShowAuthenFragment ==>response 123 ==> " + response);
                             // ตอนแรก getActivity แล้ว error เพราะค่าที่รับมาเป็น null
                             //Toast.makeText(activity, "insert complete ..." + response, Toast.LENGTH_LONG).show();
+
+                            // set qrcode key to getData
+                            getDataFromDB(myModelSaveDB.getSave_qrcode());
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -165,7 +169,7 @@ public class Second_Showdata_Fragment extends Fragment {
         // Adding the StringRequest object into requestQueue.
         requestQueue_send.add(stringRequest_send);
         // set qrcode key to getData
-        getDataFromDB(myModelSaveDB.getSave_qrcode());
+        //getDataFromDB(myModelSaveDB.getSave_qrcode());
     }
 
     private void getDataFromDB(final String save_qrcode) {
@@ -176,14 +180,13 @@ public class Second_Showdata_Fragment extends Fragment {
                 tv_token.setText("Data : "+response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
+                    tv_id.setText("id :"+jsonObject.getString("id"));
                     tv_token.setText("token :"+jsonObject.getString("token"));
                     tv_lat.setText("LAT :"+jsonObject.getString("lat"));
                     tv_lon.setText("LON :"+jsonObject.getString("lon"));
                     tv_qrcode.setText("qrcode :"+jsonObject.getString("qrcode"));
                     tv_dt.setText("date time :"+jsonObject.getString("dt"));
-                    tv_lastId.setText("last id:"+jsonObject.getString("lastId"));
-
-
+                    //tv_lastId.setText("last id:"+jsonObject.getString("lastId"));
                 }
                 catch (Exception e){
                     e.printStackTrace();

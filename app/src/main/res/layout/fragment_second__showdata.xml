@@ -35,6 +35,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/tv_id"
+            android:text="id"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/tv_qrcode"
             android:text="qrcode"/>
         <TextView
@@ -57,11 +62,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_dt"
             android:text="date time"/>
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_lastId"
-            android:text="last id"/>
+            android:text="last id"/>-->
 
 
     </LinearLayout>
